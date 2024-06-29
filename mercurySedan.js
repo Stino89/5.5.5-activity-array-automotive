@@ -1,65 +1,73 @@
-// Import the Vehicle class from the vehicle module
-const VehicleModule = require('./vehicle').Vehicle
-
-// Define a Car class that extends the Vehicle class
-class Car extends VehicleModule {
-    // Constructor to initialize the Car object with specific properties
+// Define a Vehicle class with properties and methods
+class Vehicle {
+    // Constructor to initialize the Vehicle object with specific properties
     constructor(make, model, year, color, mileage) {
-        // Call the parent class (Vehicle) constructor with required properties
-        super(make, model, year, color, mileage);
-        this.maxPassengers = 5;        // Maximum passengers the car can hold
-        this.passenger = 0;            // Current number of passengers
-        this.numberOfWheels = 4;       // Number of wheels
-        this.maxSpeed = 160;           // Maximum speed of the car
-        this.fuel = 10;                // Initial fuel level
-        this.scheduleService = false;  // Indicates if the car needs service
+        this.make = make;           // The make of the vehicle
+        this.model = model;         // The model of the vehicle
+        this.year = year;           // The manufacturing year of the vehicle
+        this.color = color;         // The color of the vehicle
+        this.passenger = 0;         // Number of passengers currently in the vehicle
+        this.speed = 0;             // Current speed of the vehicle
+        this.mileage = mileage;     // Mileage of the vehicle
+        this.started = false;       // Indicates if the vehicle engine is started
+        this.numberOfWheels = 0;    // Number of wheels on the vehicle
+        this.fuel = 100;            // Initial fuel level of the vehicle
     }
 
-    // Method to check if the car needs service based on mileage
-    checkService() {
-        if (this.mileage > 30000) {            
-            this.scheduleService = true;  // Schedule service if mileage is above 30000
-            return this.scheduleService;                       
-        }
-    }
-
-    // Method to start the car if there is fuel
-    start() {
-        if (this.fuel > 0) {            
-            console.log("engine has started.");
-            return this.started = true;  // Indicate that the car has started
-        } else {
-            console.log("no fuel");
-            return this.started = false; // Indicate that the car could not start due to lack of fuel
-        }
-    }
-
-    // Method to load passengers into the car
-    loadPassenger(num) {
-        if (this.passenger < this.maxPassengers) {
-            if ((num + this.passenger) <= this.maxPassengers) {
-                this.passenger = num;  // Update the number of passengers
-                return this.passenger;               
+    // Method to accelerate the vehicle
+    accelerate() {
+        if (this.started) { // Check if the engine is started
+            if (this.fuel > 0) { // Check if there is enough fuel
+                console.log(this.speed += 1); // Increase speed by 1
+                this.fuel = this.fuel - 1; // Decrease fuel by 1
             } else {
-                console.log(this.model + " " + this.make + " does not have enough space to take all passengers.");
+                console.log("out of fuel."); // Log out of fuel message
+                this.stop(); // Stop the vehicle
             }
         } else {
-            console.log(this.model + " " + this.make + " is full");
+            alert("You need to start the engine first."); // Alert if the engine is not started
+        }
+    }
+
+    // Method to decelerate the vehicle
+    decelerate() {
+        if (this.started) { // Check if the engine is started
+            if (this.fuel > 0) { // Check if there is enough fuel
+                if (this.speed > 0) { // Check if the vehicle is moving
+                    console.log(this.speed -= 1); // Decrease speed by 1
+                    this.fuel = this.fuel - 1; // Decrease fuel by 1
+                } else {
+                    console.log(this + " has stopped moving"); // Log stopped message
+                    this.fuel = this.fuel - 1; // Decrease fuel by 1
+                }
+            } else {
+                console.log("out of fuel."); // Log out of fuel message
+                this.stop(); // Stop the vehicle
+            }
+        } else {
+            alert("You need to start the engine first."); // Alert if the engine is not started
+        }
+    }
+
+    // Method to stop the vehicle
+    stop() {
+        console.log('engine off'); // Log engine off message
+        this.started = false; // Set started to false
+    }
+
+    // Method to determine the type of vehicle based on the number of wheels
+    typeOfVehicle() {
+        if (this.numberOfWheels == 8) {
+            console.log(this.model + " " + this.make + " is a Truck"); // Log Truck if 8 wheels
+        } else if (this.numberOfWheels == 4) {
+            console.log(this.model + " " + this.make + " is a Car"); // Log Car if 4 wheels
+        } else if (this.numberOfWheels == 2) {
+            console.log(this.model + " " + this.make + " is a Bike"); // Log Bike if 2 wheels
+        } else {
+            console.log("Unknown type of vehicle"); // Log unknown if different number of wheels
         }
     }
 }
 
-// Create an instance of the Car class
-let myCar = new Car('mercury', 'rad_sedan', '2002', 'white', 50000);
-
-// Start the car
-myCar.start();
-
-// Load passengers into the car
-myCar.loadPassenger(5);
-
-// Check if the car needs service
-myCar.checkService();
-
-// Output the current state of the car object
-console.log(myCar);
+// Export the Vehicle class for use in other modules
+module.exports = { Vehicle };
